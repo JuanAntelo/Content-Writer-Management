@@ -7,7 +7,9 @@
 <script src="lib/js/lodash.min.js"></script>
 <script src="lib/js/moment.min.js"></script>
 <script src="lib/js/superagent.min.js"></script>
+<script src="app/index.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="styles/style.css">
 
 <body>
 <div class="banner">
@@ -46,87 +48,3 @@
   </div>
 </div>
 </body>
-<script>
-superagent.get('/writerMetaDataList').end(function(err, res){	
-	var source   = $("#entry-template").html();
-	var template = Handlebars.compile(source);
-	var context = JSON.parse(res.text);
-	$("#templatePlaceholder").html(template(context));
-});
-
-Handlebars.registerHelper('list',function(items, options){
-	var ret = "";
-	for(var i = 0; i<items.length; i++) {
-		ret = ret + options.fn(items[i])
-	}
-	return ret;
-});
-</script> 
-
-<script>
-// Populate Graph
-var xAxis;
-var yAxis;
-superagent.get('/writerTotalViewList').end(function(err, res){
-   	var data = JSON.parse(res.text);
-	xAxis =  _.map(data, function(item) {
-		return item.name;
-	});
-	yAxis = _.map(data, function(item) {
-		return item.viewCount;
-	});
-	setupHighCharts();
-});
-
-var setupHighCharts = function() {
-	    $('#chart').highcharts({
-	        chart: { type: 'column' },
-	        title: { text: 'Total Views per Writer' },
-	        subtitle: { text: '' },
-	        yAxis: { min: 0, title: { text: 'Views' } },
-	        plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
-	        xAxis: { 
-	        	categories: xAxis
-	        },
-	        series: [{
-	            name: 'Content Views',
-	            data: yAxis
-	        }]	
-	    });
-	    // Remove excessive graph info
-	   $("svg > text")[1].innerHTML = "January 2010 - " + moment(Date.now()).format("MMMM YYYY");
-	   $(".highcharts-legend-item").remove(); 
-};
-</script>
-
-<script>
-	// idea for mochoa test -thier values MUST add up to the total graph
-	// api testing. no properties must be null 
-	// each view should correspond to the correct writer b/c lodash makes me question this
-</script>
-<style>	
-	#header { font-size: 25px; }
-	#container { min-width: 310px; height: 400px; margin: 0 auto; }
-	.text-center { text-align: center; }
-	.banner { background-color: rgba(239,238,238,0,64);	 }
-	.user { padding: 5px; }
-	.user > div:not(.avatar) { margin-top: 10px; }	
-	@media (min-width: 800px) {
-		.banner {
-			margin-top:   5%;
-			margin-left:   15%;
-			margin-right: 15%;
-		}
-	}
-	img {
-	    	border-radius: 50%;
-    		max-width: 45px;
-	}
-	.banner > p {
-		padding-top:20px;
-		text-align: center;
-	}
-	.users-list .user:nth-child(2n) {
-    		background: #FAFAFC;
-	}
-</style>
