@@ -18,7 +18,7 @@ writerTotalViewList = [
 ];
 viewListFields = { 'id': fields.Raw,  'name': fields.Raw, 'viewCount' : fields.Raw }
 
-writerMetaData = [{
+writerMetaData = {'writers': [{
 			'name': 'Steve J',
 			'imgPath': 'lib/images/7.jpg',
 			'socialMediaPostCount' : 3,
@@ -72,11 +72,9 @@ writerMetaData = [{
 			'employeeType' : "Fulltime",
 			'totalViews' : 176
 
-	           		  }]
-metaDataFields =  { 'name': fields.Raw,  
-		       'imgPath': fields.Raw, 'socialMediaPostCount' : fields.Raw,
-		       'blogPostCount' : fields.Raw, 'otherPostCount' : fields.Raw,
-		       'employeeType' : fields.Raw, 'totalViews' : fields.Raw }
+	           		  }]}
+
+metaDataFields = {'writers': fields.Raw}
 
 class getWriterTotalViewList(Resource):
     def get(self):

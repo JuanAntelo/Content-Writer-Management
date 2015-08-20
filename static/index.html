@@ -47,135 +47,58 @@
 </div>
 </body>
 <script>
-	superagent.get('/writerTotalViewList').end(function(err, res){
-   		console.log(res);
-   	});
+superagent.get('/writerMetaDataList').end(function(err, res){	
+	var source   = $("#entry-template").html();
+	var template = Handlebars.compile(source);
+	var context = JSON.parse(res.text);
+	$("#templatePlaceholder").html(template(context));
+});
 
-   	superagent.get('/writerMetaDataList').end(function(err, res){
-   		console.log(res);
-   	});
-
-</script>
-<script>
-//  Populate Index table
 Handlebars.registerHelper('list',function(items, options){
 	var ret = "";
 	for(var i = 0; i<items.length; i++) {
 		ret = ret + options.fn(items[i])
 	}
 	return ret;
-});	
-var source   = $("#entry-template").html();
-var template = Handlebars.compile(source);
-var context =  getWriterMetaData();
-$("#templatePlaceholder").html(template(context));
-
-// API Call
-function getWriterMetaData()	{	
-		return	{ writers : [{
-				name: 'Steve J',
-				imgPath: 'lib/images/7.jpg',
-				socialMediaPostCount : 3,
-				blogPostCount : 2,
-				otherPostCount : 1,
-				employeeType : "Fulltime",
-				totalViews : 49
-	           		  },
-	           		  {
-				name: 'Bill A',
-				imgPath: 'lib/images/2.jpg',
-				socialMediaPostCount : 5,
-				blogPostCount : 1,
-				otherPostCount : 1,
-				employeeType : "Fulltime",
-				totalViews : 71
-	           		  },
-		              {
-				name: 'Joe K',
-				imgPath: 'lib/images/5.jpg',
-				socialMediaPostCount : 4,
-				blogPostCount : 1,
-				otherPostCount : 1,
-				employeeType : "Fulltime",
-				totalViews : 106
-	           		  },
-	           		  {
-				name: 'Alex M',
-				imgPath: 'lib/images/3.jpg',
-				socialMediaPostCount : 2,
-				blogPostCount : 3,
-				otherPostCount : 1,
-				employeeType : "Freelance",
-				totalViews : 129
-	           		  },
-			  {
-				name: 'Jade',
-				imgPath: 'lib/images/6.jpg',
-				socialMediaPostCount : 5,
-				blogPostCount : 2,
-				otherPostCount : 1,
-				employeeType : "Temp",
-				totalViews : 144
-	           		  },
-	           		  {
-	           		  	name: 'Carlos A',
-				imgPath: 'lib/images/1.jpg',
-				socialMediaPostCount : 1,
-				blogPostCount : 1,
-				otherPostCount : 1,
-				employeeType : "Fulltime",
-				totalViews : 176
-
-	           		  }]
-	           	};
-}	
+});
 </script> 
 
 <script>
-// Populate Index Graph
-	var writerTotalViewList = getWriterTotalViewList(); 
-	var xAxis =  _.map(writerTotalViewList, function(item) {
+// Populate Graph
+var xAxis;
+var yAxis;
+superagent.get('/writerTotalViewList').end(function(err, res){
+   	var data = JSON.parse(res.text);
+	xAxis =  _.map(data, function(item) {
 		return item.name;
 	});
-	var yAxis = _.map(writerTotalViewList, function(item) {
+	yAxis = _.map(data, function(item) {
 		return item.viewCount;
 	});
-
-	// API Call 
-	function getWriterTotalViewList() {
-		return [
-			{id: 1, name: 'Steve J', viewCount: 49},
-			{id: 2, name: 'Bill A', viewCount: 71},
-			{id: 3, name: 'Joe K', viewCount: 106},
-			{id: 4, name: 'Alex M', viewCount: 129},
-			{id: 5, name: 'Jade S', viewCount: 144},
-			{id: 6, name: 'Carlos A', viewCount: 176}
-		];
-	}
-</script>
-<script>
-// Setup Index Chart
-$(function () {
-    $('#chart').highcharts({
-        chart: { type: 'column' },
-        title: { text: 'Total Views per Writer' },
-        subtitle: { text: '' },
-        yAxis: { min: 0, title: { text: 'Views' } },
-        plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
-        xAxis: { 
-        	categories: xAxis
-        },
-        series: [{
-            name: 'Content Views',
-            data: yAxis
-        }]	
-    });
-    // Remove excessive graph info
-   $("svg > text")[1].innerHTML = "January 2010 - " + moment(Date.now()).format("MMMM YYYY");
-   $(".highcharts-legend-item").remove(); 
-
+	setupHighCharts();
 });
+
+var setupHighCharts = function() {
+	    $('#chart').highcharts({
+	        chart: { type: 'column' },
+	        title: { text: 'Total Views per Writer' },
+	        subtitle: { text: '' },
+	        yAxis: { min: 0, title: { text: 'Views' } },
+	        plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
+	        xAxis: { 
+	        	categories: xAxis
+	        },
+	        series: [{
+	            name: 'Content Views',
+	            data: yAxis
+	        }]	
+	    });
+	    // Remove excessive graph info
+	   $("svg > text")[1].innerHTML = "January 2010 - " + moment(Date.now()).format("MMMM YYYY");
+	   $(".highcharts-legend-item").remove(); 
+};
 </script>
+
 <script>
 	// idea for mochoa test -thier values MUST add up to the total graph
 	// api testing. no properties must be null 
