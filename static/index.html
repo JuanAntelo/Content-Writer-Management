@@ -6,6 +6,7 @@
 <script src="lib/js/handlebars.min.js"></script>
 <script src="lib/js/lodash.min.js"></script>
 <script src="lib/js/moment.min.js"></script>
+<script src="lib/js/superagent.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/css/bootstrap.min.css">
 
 <body>
@@ -45,6 +46,16 @@
   </div>
 </div>
 </body>
+<script>
+	superagent.get('/writerTotalViewList').end(function(err, res){
+   		console.log(res);
+   	});
+
+   	superagent.get('/writerMetaDataList').end(function(err, res){
+   		console.log(res);
+   	});
+
+</script>
 <script>
 //  Populate Index table
 Handlebars.registerHelper('list',function(items, options){
