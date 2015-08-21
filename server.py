@@ -1,3 +1,4 @@
+import os
 from flask import Flask, Response
 from flask_restful import Resource, Api, marshal, fields
 
@@ -87,4 +88,5 @@ api.add_resource(getWriterTotalViewList, '/writerTotalViewList')
 api.add_resource(getWriterMetaDataList, '/writerMetaDataList')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=33507) # 33507 is reserved for flask apps
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
