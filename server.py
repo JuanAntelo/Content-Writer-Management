@@ -87,4 +87,4 @@ api.add_resource(getWriterTotalViewList, '/writerTotalViewList')
 api.add_resource(getWriterMetaDataList, '/writerMetaDataList')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
