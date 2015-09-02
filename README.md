@@ -6,7 +6,7 @@ To view this application running go to:
 
 http://mighty-tundra-7996.herokuapp.com/ (may take few moments for the data come in)
 
-This demonstrates basic RESTful AJAX calls and an a pretty chart + table 
+This demonstrates basic RESTful AJAX calls and a pretty chart + table. Backend is in Python + Flask, no connection to db
 
 ```
 Todo - Add & Delete a new content writer
